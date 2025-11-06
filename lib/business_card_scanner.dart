@@ -12,6 +12,7 @@ import 'src/parsers/text_parser.dart';
 export 'src/analyzers/analyzer_provider.dart';
 export 'src/models/business_card_data.dart';
 export 'src/ocr/ocr_service.dart';
+export 'src/ocr/general_ocr_service.dart';
 export 'src/parsers/text_parser.dart';
 
 /// Main class for scanning and processing business cards

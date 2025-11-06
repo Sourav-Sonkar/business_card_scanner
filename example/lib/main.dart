@@ -1,8 +1,8 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:business_card_scanner/business_card_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'general_ocr_demo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +14,110 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Business Card Scanner',
+      title: 'OCR Scanner Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
-      home: const BusinessCardScannerScreen(),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('OCR Scanner Demo'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Flexible(
+                child: Icon(
+                  Icons.document_scanner,
+                  size: 80,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'OCR Scanner Demo',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Choose your scanning mode',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Colors.grey.shade600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+            
+            // Business Card Scanner
+            Card(
+              elevation: 4,
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(16.0),
+                leading: const Icon(Icons.contact_mail, size: 32),
+                title: const Text('Business Card Scanner'),
+                subtitle: const Text(
+                  'Extract contact information from business cards',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BusinessCardScannerScreen(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // General OCR
+            Card(
+              elevation: 4,
+              child: ListTile(
+                contentPadding: const EdgeInsets.all(16.0),
+                leading: const Icon(Icons.text_fields, size: 32),
+                title: const Text('General Text Scanner'),
+                subtitle: const Text(
+                  'Extract text from any image or document',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const GeneralOcrDemo(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -61,6 +159,29 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
     }
   }
 
+  Future<void> _testWithAssetImage() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      // Load the test image from assets
+      final ByteData data = await rootBundle.load('assets/test_card.png');
+      final Uint8List imageBytes = data.buffer.asUint8List();
+      
+      await _processImage(imageBytes);
+    } catch (e) {
+      setState(() {
+        _error = 'Error loading test image: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> _processImage(Uint8List imageBytes) async {
     setState(() {
       _isLoading = true;
@@ -68,11 +189,22 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
     });
 
     try {
+      debugPrint('🔍 Processing image with ${imageBytes.length} bytes');
       final result = await _scanner.scan(imageBytes);
+      debugPrint('✅ Scan completed. Raw text length: ${result.rawText.length}');
+      debugPrint('📧 Emails found: ${result.emails.length}');
+      debugPrint('📞 Phones found: ${result.phones.length}');
+      debugPrint('🌐 URLs found: ${result.urls.length}');
+      
+      if (result.rawText.isNotEmpty) {
+        debugPrint('📝 Raw text preview: ${result.rawText.substring(0, result.rawText.length > 100 ? 100 : result.rawText.length)}');
+      }
+      
       setState(() {
         _result = result;
       });
     } catch (e) {
+      debugPrint('❌ Error processing image: $e');
       setState(() {
         _error = 'Error processing image: $e';
       });
@@ -103,7 +235,7 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
             ...items.map((item) => Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(item),
-            )).toList(),
+            )),
           ],
         ),
       ),
@@ -125,9 +257,16 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
                   if (_error != null)
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        _error!,
-                        style: const TextStyle(color: Colors.red),
+                      child: Card(
+                        color: Colors.red.shade50,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Text(
+                            _error!,
+                            style: TextStyle(color: Colors.red.shade700),
+                            overflow: TextOverflow.visible,
+                          ),
+                        ),
                       ),
                     ),
                   if (_result != null) ...[
@@ -182,9 +321,21 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: SelectableText(
-                        _result!.rawText,
-                        style: const TextStyle(fontFamily: 'monospace'),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: SelectableText(
+                          _result!.rawText.isEmpty ? 'No text found' : _result!.rawText,
+                          style: const TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 14.0,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16.0),
@@ -211,23 +362,33 @@ class _BusinessCardScannerScreenState extends State<BusinessCardScannerScreen> {
                 ],
               ),
             ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton(
-            heroTag: 'camera',
-            onPressed: _takePhoto,
-            tooltip: 'Take Photo',
-            child: const Icon(Icons.camera_alt),
-          ),
-          const SizedBox(height: 16.0),
-          FloatingActionButton(
-            heroTag: 'gallery',
-            onPressed: _pickImage,
-            tooltip: 'Choose from Gallery',
-            child: const Icon(Icons.photo_library),
-          ),
-        ],
+      floatingActionButton: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FloatingActionButton(
+              heroTag: 'test',
+              onPressed: _testWithAssetImage,
+              tooltip: 'Test with Asset Image',
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.bug_report),
+            ),
+            const SizedBox(height: 12.0),
+            FloatingActionButton(
+              heroTag: 'camera',
+              onPressed: _takePhoto,
+              tooltip: 'Take Photo',
+              child: const Icon(Icons.camera_alt),
+            ),
+            const SizedBox(height: 12.0),
+            FloatingActionButton(
+              heroTag: 'gallery',
+              onPressed: _pickImage,
+              tooltip: 'Choose from Gallery',
+              child: const Icon(Icons.photo_library),
+            ),
+          ],
+        ),
       ),
     );
   }
