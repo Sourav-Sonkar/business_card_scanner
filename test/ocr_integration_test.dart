@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:business_card_scanner/business_card_scanner.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:business_card_scanner/business_card_scanner.dart';
 
 void main() {
   // Initialize Flutter bindings for ML Kit
@@ -43,7 +44,7 @@ void main() {
 
       final imageBytes = await testImageFile.readAsBytes();
       expect(imageBytes.isNotEmpty, isTrue, 
-        reason: 'Image bytes should not be empty');
+        reason: 'Image bytes should not be empty',);
 
       // Scan the business card
       final result = await scanner.scan(imageBytes);
@@ -81,7 +82,7 @@ void main() {
       final minimalImageBytes = Uint8List.fromList([
         0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, // JPEG header
         0x00, 0x01, 0x01, 0x01, 0x00, 0x48, 0x00, 0x48, 0x00, 0x00,
-        0xFF, 0xD9 // JPEG end
+        0xFF, 0xD9, // JPEG end
       ]);
       
       final result = await scanner.scan(minimalImageBytes);

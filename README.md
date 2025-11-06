@@ -4,12 +4,12 @@ A Flutter package for scanning and extracting information from business cards an
 
 ## Features
 
-- 📱 **Business Card Scanning**: Extract structured data from business cards
-- 🔍 **General OCR**: Extract text from any image with metadata
-- �  **Smart Parsing**: Automatically extract emails, phone numbers, and URLs
-- ⚡ **Offline Processing**: Uses Google ML Kit for on-device text recognition
-- 🏗️ **Extensible Architecture**: Ready for future AI integration
-- 📱 **Platform-agnostic**: Works on iOS, Android, and other Flutter platforms
+-  **Business Card Scanning**: Extract structured data from business cards
+-  **General OCR**: Extract text from any image with metadata
+-  **Smart Parsing**: Automatically extract emails, phone numbers, and URLs
+-  **Offline Processing**: Uses Google ML Kit for on-device text recognition
+-  **Extensible Architecture**: Ready for future AI integration
+-  **Platform-agnostic**: Works on iOS, Android, and other Flutter platforms
 
 ## Installation
 

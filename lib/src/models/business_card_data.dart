@@ -71,9 +71,9 @@ class BusinessCardData {
 
   /// Merges this BusinessCardData with another one
   BusinessCardData merge(BusinessCardData other) {
-    final Set<String> mergedEmails = <String>{...emails, ...other.emails};
-    final Set<String> mergedPhones = <String>{...phones, ...other.phones};
-    final Set<String> mergedUrls = <String>{...urls, ...other.urls};
+    final mergedEmails = <String>{...emails, ...other.emails};
+    final mergedPhones = <String>{...phones, ...other.phones};
+    final mergedUrls = <String>{...urls, ...other.urls};
     
     return BusinessCardData(
       rawText: rawText,

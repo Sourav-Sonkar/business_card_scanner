@@ -16,10 +16,10 @@ abstract class AnalyzerProvider {
 /// Default implementation of [AnalyzerProvider] that uses regex patterns
 /// to extract information from business card text.
 class LocalRegexAnalyzer implements AnalyzerProvider {
-  final TextParser _textParser;
-  
   /// Creates a new [LocalRegexAnalyzer] instance
-  const LocalRegexAnalyzer() : _textParser = const TextParser();
+  const LocalRegexAnalyzer();
+
+  TextParser get _textParser => const TextParser();
   
   @override
   Future<BusinessCardData> analyze(String text) async {

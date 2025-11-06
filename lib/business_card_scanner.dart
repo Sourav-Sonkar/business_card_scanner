@@ -11,16 +11,12 @@ import 'src/parsers/text_parser.dart';
 
 export 'src/analyzers/analyzer_provider.dart';
 export 'src/models/business_card_data.dart';
-export 'src/ocr/ocr_service.dart';
 export 'src/ocr/general_ocr_service.dart';
+export 'src/ocr/ocr_service.dart';
 export 'src/parsers/text_parser.dart';
 
 /// Main class for scanning and processing business cards
 class BusinessCardScanner {
-  final OcrService _ocrService;
-  final TextParser _textParser;
-  final AnalyzerProvider? _analyzerProvider;
-  final Logger _logger = Logger();
 
   /// Create a new BusinessCardScanner instance
   ///
@@ -28,8 +24,12 @@ class BusinessCardScanner {
   /// If not provided, uses a default regex-based analyzer.
   BusinessCardScanner({AnalyzerProvider? analyzerProvider})
       : _ocrService = OcrService(),
-        _textParser = TextParser(),
+        _textParser = const TextParser(),
         _analyzerProvider = analyzerProvider;
+  final OcrService _ocrService;
+  final TextParser _textParser;
+  final AnalyzerProvider? _analyzerProvider;
+  final Logger _logger = Logger();
 
   /// Scans a business card image and extracts structured data
   ///
@@ -40,7 +40,7 @@ class BusinessCardScanner {
       _logger.i('Starting business card scan');
       
       // Perform OCR
-      var recognizedText = await _ocrService.recognizeText(imageBytes);
+      final recognizedText = await _ocrService.recognizeText(imageBytes);
       
       // Parse text to extract information
       final parsedData = _textParser.parse(recognizedText);

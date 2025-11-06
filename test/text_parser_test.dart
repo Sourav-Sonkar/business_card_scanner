@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:business_card_scanner/business_card_scanner.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TextParser', () {
@@ -113,10 +113,15 @@ void main() {
       My email is john@company.com
       ''';
 
-      final result = parser.parse(testText);
+      final  result = parser.parse(testText);
 
       expect(result.emails.length, equals(1));
       expect(result.emails.first, equals('john@company.com'));
     });
   });
 }
+
+
+
+
+

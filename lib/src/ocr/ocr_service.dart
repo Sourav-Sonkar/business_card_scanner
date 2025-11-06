@@ -6,6 +6,9 @@ import 'package:path_provider/path_provider.dart';
 
 /// Service for performing OCR on business card images
 class OcrService {
+  /// Creates a new OcrService instance
+  OcrService() : _textRecognizer = TextRecognizer();
+
   final TextRecognizer _textRecognizer;
   final Logger _logger = Logger(
     printer: PrettyPrinter(
@@ -13,9 +16,6 @@ class OcrService {
       errorMethodCount: 5,
     ),
   );
-
-  /// Creates a new OcrService instance
-  OcrService() : _textRecognizer = TextRecognizer();
 
   /// Recognizes text in the given image
   /// 
@@ -51,17 +51,17 @@ class OcrService {
       }
       
       return result;
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       _logger.e('❌ Error in text recognition: $e', stackTrace: stackTrace);
       // Return empty string instead of rethrowing to prevent app crashes
       return '';
     } finally {
       // Clean up temporary file
-      if (tempFile != null && await tempFile.exists()) {
+      if (tempFile != null && tempFile.existsSync()) {
         try {
           await tempFile.delete();
           _logger.d('🗑️ Cleaned up temporary file');
-        } catch (e) {
+        } on Exception catch (e) {
           _logger.w('Failed to delete temporary file: $e');
         }
       }

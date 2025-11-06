@@ -1,19 +1,20 @@
 import 'dart:typed_data';
-import 'package:business_card_scanner/src/ocr/ocr_service.dart';
+
+import 'ocr_service.dart';
 
 /// A general-purpose OCR service that can extract text from any image
 class GeneralOcrService {
-  final OcrService _ocrService;
-
   /// Creates a new GeneralOcrService instance
   GeneralOcrService() : _ocrService = OcrService();
+
+  final OcrService _ocrService;
 
   /// Extracts all text from an image
   /// 
   /// [imageBytes] - The image data as Uint8List
   /// Returns a [Future] that completes with the extracted text
   Future<String> extractText(Uint8List imageBytes) async {
-    return await _ocrService.recognizeText(imageBytes);
+    return _ocrService.recognizeText(imageBytes);
   }
 
   /// Extracts text with additional metadata
@@ -42,6 +43,15 @@ class GeneralOcrService {
 
 /// Result of OCR processing with metadata
 class OcrResult {
+  /// Creates a new OcrResult
+  const OcrResult({
+    required this.text,
+    required this.processingTimeMs,
+    required this.characterCount,
+    required this.wordCount,
+    required this.lineCount,
+  });
+
   /// The extracted text
   final String text;
   
@@ -56,15 +66,6 @@ class OcrResult {
   
   /// Number of lines found
   final int lineCount;
-
-  /// Creates a new OcrResult
-  const OcrResult({
-    required this.text,
-    required this.processingTimeMs,
-    required this.characterCount,
-    required this.wordCount,
-    required this.lineCount,
-  });
 
   /// Returns true if any text was found
   bool get hasText => text.trim().isNotEmpty;

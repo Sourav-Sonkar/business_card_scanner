@@ -1,4 +1,4 @@
-import 'package:business_card_scanner/src/models/business_card_data.dart';
+import '../models/business_card_data.dart';
 
 /// A utility class for parsing text from business cards
 class TextParser {
@@ -31,23 +31,23 @@ class TextParser {
   /// Returns a [BusinessCardData] object with the extracted information
   BusinessCardData parse(String text) {
     // Extract emails
-    final List<RegExpMatch> emailMatches = _emailRegex.allMatches(text).toList();
-    final List<String> emails = emailMatches
-        .map((RegExpMatch match) => match.group(0)!)
+    final emailMatches = _emailRegex.allMatches(text).toList();
+    final emails = emailMatches
+        .map((match) => match.group(0)!)
         .toSet()
         .toList(growable: false);
 
     // Extract phone numbers
-    final List<RegExpMatch> phoneMatches = _phoneRegex.allMatches(text).toList();
-    final List<String> phones = phoneMatches
-        .map((RegExpMatch match) => match.group(0)!)
+    final phoneMatches = _phoneRegex.allMatches(text).toList();
+    final phones = phoneMatches
+        .map((match) => match.group(0)!)
         .toSet()
         .toList(growable: false);
 
     // Extract URLs
-    final List<RegExpMatch> urlMatches = _urlRegex.allMatches(text).toList();
-    final List<String> urls = urlMatches
-        .map((RegExpMatch match) => match.group(0)!)
+    final urlMatches = _urlRegex.allMatches(text).toList();
+    final urls = urlMatches
+        .map((match) => match.group(0)!)
         .toSet()
         .toList(growable: false);
 

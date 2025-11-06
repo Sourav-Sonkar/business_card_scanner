@@ -1,14 +1,14 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:business_card_scanner/business_card_scanner.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('BusinessCardData', () {
     test('should create BusinessCardData with all fields', () {
       final data = BusinessCardData(
         rawText: 'Sample business card text',
-        emails: ['john@company.com', 'info@company.com'],
-        phones: ['+1-555-123-4567', '(555) 987-6543'],
-        urls: ['www.company.com', 'https://company.com'],
+        emails: const ['john@company.com', 'info@company.com'],
+        phones: const ['+1-555-123-4567', '(555) 987-6543'],
+        urls: const ['www.company.com', 'https://company.com'],
         name: 'John Doe',
         title: 'Software Engineer',
         company: 'Tech Company Inc.',
@@ -28,9 +28,9 @@ void main() {
     test('should provide convenience getters', () {
       final data = BusinessCardData(
         rawText: 'Test',
-        emails: ['first@test.com', 'second@test.com'],
-        phones: ['123-456-7890', '098-765-4321'],
-        urls: ['www.test.com', 'blog.test.com'],
+        emails: const ['first@test.com', 'second@test.com'],
+        phones: const ['123-456-7890', '098-765-4321'],
+        urls: const ['www.test.com', 'blog.test.com'],
       );
 
       expect(data.email, equals('first@test.com'));
@@ -41,9 +41,6 @@ void main() {
     test('should return null for empty lists', () {
       final data = BusinessCardData(
         rawText: 'Test',
-        emails: [],
-        phones: [],
-        urls: [],
       );
 
       expect(data.email, isNull);
@@ -54,17 +51,17 @@ void main() {
     test('should merge two BusinessCardData objects', () {
       final data1 = BusinessCardData(
         rawText: 'Original text',
-        emails: ['email1@test.com'],
-        phones: ['123-456-7890'],
-        urls: ['www.test.com'],
+        emails: const ['email1@test.com'],
+        phones: const ['123-456-7890'],
+        urls: const ['www.test.com'],
         name: 'John Doe',
       );
 
       final data2 = BusinessCardData(
         rawText: 'Additional text',
-        emails: ['email2@test.com'],
-        phones: ['098-765-4321'],
-        urls: ['blog.test.com'],
+        emails: const ['email2@test.com'],
+        phones: const ['098-765-4321'],
+        urls: const ['blog.test.com'],
         title: 'Software Engineer',
         company: 'Tech Corp',
       );
@@ -83,9 +80,9 @@ void main() {
     test('should convert to and from map', () {
       final originalData = BusinessCardData(
         rawText: 'Test card text',
-        emails: ['test@example.com'],
-        phones: ['555-1234'],
-        urls: ['www.example.com'],
+        emails: const ['test@example.com'],
+        phones: const ['555-1234'],
+        urls: const ['www.example.com'],
         name: 'Test User',
         title: 'Developer',
         company: 'Test Corp',
@@ -108,9 +105,9 @@ void main() {
     test('should have proper toString representation', () {
       final data = BusinessCardData(
         rawText: 'Short text',
-        emails: ['test@example.com'],
-        phones: ['555-1234'],
-        urls: ['www.example.com'],
+        emails: const ['test@example.com'],
+        phones: const ['555-1234'],
+        urls: const ['www.example.com'],
       );
 
       final stringRep = data.toString();

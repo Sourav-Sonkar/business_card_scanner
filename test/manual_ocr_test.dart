@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'package:flutter_test/flutter_test.dart';
+
 import 'package:business_card_scanner/business_card_scanner.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   // This test is designed to be run manually to debug OCR issues
@@ -90,7 +89,7 @@ void main() {
       Tech City, TC 12345
       ''';
       
-      final parser = TextParser();
+      const parser = TextParser();
       final result = parser.parse(sampleBusinessCardText);
       
       print('📋 Parsing Results:');

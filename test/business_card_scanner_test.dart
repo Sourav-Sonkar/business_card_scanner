@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+
+import 'package:business_card_scanner/business_card_scanner.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:business_card_scanner/business_card_scanner.dart';
 
 void main() {
   // Initialize Flutter bindings for ML Kit
@@ -22,11 +23,11 @@ void main() {
       // Load the test image from assets
       final testImageFile = File('example/assets/test_card.png');
       expect(testImageFile.existsSync(), isTrue, 
-        reason: 'Test image should exist at example/assets/test_card.png');
+        reason: 'Test image should exist at example/assets/test_card.png',);
 
       final imageBytes = await testImageFile.readAsBytes();
       expect(imageBytes.isNotEmpty, isTrue, 
-        reason: 'Image bytes should not be empty');
+        reason: 'Image bytes should not be empty',);
 
       // Scan the business card
       final result = await scanner.scan(imageBytes);
@@ -34,7 +35,7 @@ void main() {
       // Verify that we got some results
       expect(result, isNotNull);
       expect(result.rawText, isNotEmpty, 
-        reason: 'Should extract some text from the business card');
+        reason: 'Should extract some text from the business card',);
 
       // Print results for debugging
       print('Raw text extracted: ${result.rawText}');
@@ -48,7 +49,7 @@ void main() {
                            result.urls.isNotEmpty;
       
       expect(hasContactInfo, isTrue, 
-        reason: 'Should find at least one email, phone, or URL in a business card');
+        reason: 'Should find at least one email, phone, or URL in a business card',);
     });
 
     test('should handle empty image gracefully', () async {
@@ -73,7 +74,7 @@ void main() {
       Phone: +1-555-123-4567
       ''';
 
-      final parser = TextParser();
+      const parser = TextParser();
       final result = parser.parse(testText);
 
       expect(result.emails.length, equals(2));
@@ -89,7 +90,7 @@ void main() {
       Office: 555.111.2222
       ''';
 
-      final parser = TextParser();
+      const parser = TextParser();
       final result = parser.parse(testText);
 
       expect(result.phones.isNotEmpty, isTrue);
@@ -104,7 +105,7 @@ void main() {
       LinkedIn: linkedin.com/in/johndoe
       ''';
 
-      final parser = TextParser();
+      const parser = TextParser();
       final result = parser.parse(testText);
 
       expect(result.urls.isNotEmpty, isTrue);
