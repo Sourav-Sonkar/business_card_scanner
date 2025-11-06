@@ -1,8 +1,8 @@
 name: business_card_scanner
 description: A Flutter package for scanning and extracting information from business cards offline using ML Kit.
 version: 1.0.0
-homepage: https://github.com/yourusername/business_card_scanner
-repository: https://github.com/yourusername/business_card_scanner
+homepage: https://github.com/Sourav-Sonkar/business_card_scanner
+repository: https://github.com/Sourav-Sonkar/business_card_scanner.git
 
 environment:
   sdk: '>=2.19.0 <4.0.0'
